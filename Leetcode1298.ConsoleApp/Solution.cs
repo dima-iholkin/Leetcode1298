@@ -17,16 +17,16 @@ public class Solution
         int[] initialBoxes
     )
     {
-        int arrayLength = obtainedKeys.Length;
-        int[] obtainedBoxes = new int[arrayLength];
+        HashSet<int> obtainedBoxes = new HashSet<int>();
 
         foreach (int item in initialBoxes)
         {
-            obtainedBoxes[item] = 1;
-
             if (obtainedKeys[item] == 1)
             {
                 boxesToOpen.Enqueue(item);
+            } else
+            {
+                obtainedBoxes.Add(item);
             }
         }
 
@@ -53,30 +53,33 @@ public class Solution
         int[][] keysContainedInEachBox,
         int[][] boxesContainedInEachBox,
         int[] obtainedKeys,
-        int[] obtainedBoxes,
+        HashSet<int> obtainedBoxes,
         int[] candiesInEachBox
     )
     {
+        total += candiesInEachBox[boxNumber];
+
         foreach (int item in keysContainedInEachBox[boxNumber])
         {
             obtainedKeys[item] = 1;
 
-            if (obtainedBoxes[item] == 1)
+            if (obtainedBoxes.Contains(item))
             {
+                obtainedBoxes.Remove(item);
                 boxesToOpen.Enqueue(item);
             }
         }
 
         foreach (int item in boxesContainedInEachBox[boxNumber])
         {
-            obtainedBoxes[item] = 1;
-
             if (obtainedKeys[item] == 1)
             {
                 boxesToOpen.Enqueue(item);
             }
+            else
+            {
+                obtainedBoxes.Add(item);
+            }
         }
-
-        total += candiesInEachBox[boxNumber];
     }
 }
