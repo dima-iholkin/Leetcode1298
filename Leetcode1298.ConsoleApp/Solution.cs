@@ -7,10 +7,10 @@ public class Solution
     private HashSet<int> boxesToCheck = new HashSet<int>();
 
     public int MaxCandies(
-        int[] openedBoxes, 
-        int[] candiesInEachBox, 
-        int[][] keysContainedInEachBox, 
-        int[][] boxesContainedInEachBox, 
+        int[] openedBoxes,
+        int[] candiesInEachBox,
+        int[][] keysContainedInEachBox,
+        int[][] boxesContainedInEachBox,
         int[] initialBoxes
     )
     {
@@ -21,7 +21,7 @@ public class Solution
         foreach (int item in initialBoxes)
         {
             obtainedBoxes[item] = 1;
-            
+
             if (openedBoxes[item] == 1)
             {
                 boxesToCheck.Add(item);
@@ -64,7 +64,10 @@ public class Solution
         {
             obtainedKeys[item] = 1;
 
-            if (obtainedBoxes[item] == 1)
+            if (
+                obtainedBoxes[item] == 1
+            //&& obtainedKeys[item] == 1
+            )
             {
                 openedBoxes[item] = 1;
                 boxesToCheck.Add(item);
@@ -86,8 +89,8 @@ public class Solution
 
 
     private int CountCandiesSum(
-        int[] openedBoxes, 
-        int[] obtainedBoxes, 
+        int[] openedBoxes,
+        int[] obtainedBoxes,
         int[] candiesInEachBox
     )
     {
@@ -95,7 +98,10 @@ public class Solution
 
         foreach (var item in openedBoxes.Select((boxNumber, index) => (boxNumber, index)))
         {
-            if (item.boxNumber == 1 && obtainedBoxes[item.index] == 1)
+            if (
+                item.boxNumber == 1
+                && obtainedBoxes[item.index] == 1
+            )
             {
                 total += candiesInEachBox[item.index];
             }
