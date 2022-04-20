@@ -4,73 +4,66 @@
 
 public class Solution
 {
-    private HashSet<int> boxesToCheck = new HashSet<int>();
+    private Queue<int> boxesToOpen = new Queue<int>();
+    private int total = 0;
+
+
 
     public int MaxCandies(
-        int[] openedBoxes,
+        int[] obtainedKeys,
         int[] candiesInEachBox,
         int[][] keysContainedInEachBox,
         int[][] boxesContainedInEachBox,
         int[] initialBoxes
     )
     {
-        int arrayLength = openedBoxes.Length;
+        int arrayLength = obtainedKeys.Length;
         int[] obtainedBoxes = new int[arrayLength];
-        int[] obtainedKeys = new int[arrayLength];
 
         foreach (int item in initialBoxes)
         {
             obtainedBoxes[item] = 1;
 
-            if (openedBoxes[item] == 1)
+            if (obtainedKeys[item] == 1)
             {
-                boxesToCheck.Add(item);
+                boxesToOpen.Enqueue(item);
             }
         }
 
-        while (boxesToCheck.Any())
+        while (boxesToOpen.Any())
         {
-            int item = boxesToCheck.First();
-            boxesToCheck.Remove(item);
-            CheckBox(
+            int item = boxesToOpen.Dequeue();
+            OpenBox(
                 item,
                 keysContainedInEachBox,
                 boxesContainedInEachBox,
                 obtainedKeys,
                 obtainedBoxes,
-                openedBoxes
+                candiesInEachBox
             );
         }
 
-        return CountCandiesSum(
-            openedBoxes,
-            obtainedBoxes,
-            candiesInEachBox
-        );
+        return total;
     }
 
 
 
-    private void CheckBox(
+    private void OpenBox(
         int boxNumber,
         int[][] keysContainedInEachBox,
         int[][] boxesContainedInEachBox,
         int[] obtainedKeys,
         int[] obtainedBoxes,
-        int[] openedBoxes
+        int[] candiesInEachBox
     )
     {
         foreach (int item in keysContainedInEachBox[boxNumber])
         {
             obtainedKeys[item] = 1;
 
-            if (
-                obtainedBoxes[item] == 1
-            //&& obtainedKeys[item] == 1
-            )
+            if (obtainedBoxes[item] == 1)
             {
-                openedBoxes[item] = 1;
-                boxesToCheck.Add(item);
+                boxesToOpen.Enqueue(item);
             }
         }
 
@@ -78,35 +71,12 @@ public class Solution
         {
             obtainedBoxes[item] = 1;
 
-            if (obtainedKeys[item] == 1 || openedBoxes[item] == 1)
+            if (obtainedKeys[item] == 1)
             {
-                openedBoxes[item] = 1;
-                boxesToCheck.Add(item);
-            }
-        }
-    }
-
-
-
-    private int CountCandiesSum(
-        int[] openedBoxes,
-        int[] obtainedBoxes,
-        int[] candiesInEachBox
-    )
-    {
-        int total = 0;
-
-        foreach (var item in openedBoxes.Select((boxNumber, index) => (boxNumber, index)))
-        {
-            if (
-                item.boxNumber == 1
-                && obtainedBoxes[item.index] == 1
-            )
-            {
-                total += candiesInEachBox[item.index];
+                boxesToOpen.Enqueue(item);
             }
         }
 
-        return total;
+        total += candiesInEachBox[boxNumber];
     }
 }
